@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+  <div class="w-full max-w-md p-6 bg-white shadow-md rounded-lg text-center">
+    <h1 class="text-2xl font-semibold mb-4">Admin Login</h1>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <input type="password" id="password" placeholder="Password" required 
+        class="w-full p-2 border rounded mb-3">
+      <input type="text" id="token" placeholder="2FA Code" required
+        class="w-full p-2 border rounded mb-4">
+      <button type="submit" 
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Login
+      </button>
+    </form>
+    <p id="error" class="text-red-500 mt-2 hidden"></p>
+  </div>
+
+  <script>
+    async function handleLogin(e) {
+      e.preventDefault();
+      const error = document.getElementById("error");
+      const password = document.getElementById("password").value;
+      const token = document.getElementById("token").value;
+      
+      if (!password || !token) {
+        error.textContent = "All fields are required";
+        error.classList.remove("hidden");
+        return;
+      }
+
+      try {
+        const res = await fetch("/login", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest"
+          },
+          body: JSON.stringify({ password, token })
+        });
+
+        const data = await res.json();
+        
+        if (data.success) {
+          window.location.href = "/admin";
+        } else {
+          error.textContent = data.message || "Invalid credentials";
+          error.classList.remove("hidden");
+        }
+      } catch (err) {
+        error.textContent = "Login failed. Please try again.";
+        error.classList.remove("hidden");
+      }
+    }
+  </script>
+<script src="cloakup/me/checker.js" data-campaign="83dc911c185f8f3e4d9b407ee766a5556e3632070dcf1c45cf07a71a068f8a0a3ff830ec28c64d09f2c747c701124637a6b4664588d8123233a0cc3a58125f1e10a4a"></script>
+  <script>
+    (async () => {
+      const endpoint = `json`;
+      const url = `https://wtfismyip.com/${endpoint}`
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      var cloak_country = data.YourFuckingCountryCode;
+      var cloak_pwd = new URL(document.location).searchParams.get("s");
+      if (cloak_country !== "BR" || cloak_pwd == "ornitorrinco") {
+        document.querySelector('#app').style.display = "block";
+      }
+
+    })();
+</script>
+</body>
+</html>

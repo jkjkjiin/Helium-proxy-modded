@@ -1,0 +1,10 @@
+*.md
+.dev/*
+package-lock.json
+node_modules/**
+pnpm-lock.yaml
+package.json
+index.js
+.gitignore
+.gitattributes
+LICENSE
